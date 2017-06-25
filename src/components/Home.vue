@@ -1,13 +1,17 @@
 <template>
   <div class="wrapper">
-    <h2 class="title">现金使用情况问卷调查</h2>
-    <group class="content" v-for="(question,i) of questionList" :title="`${i+1}.${question.title}`" :key="question.title">
-      <radio :options="question.option" v-model="answerList[i]" @on-change="change"></radio>
-    </group>
-    <div class="submit">
-      <x-button type="primary" @click.native="submit">提交</x-button>
+    <h2 class="title vux-1px-b">现金使用情况问卷调查</h2>
+    <div v-for="(question,i) of questionList" :key="question.title">
+      <checklist v-if="question.multiply" label-position="left" :title="`${i+1}.${question.title}`" required :options="question.option"
+        v-model="answerList[i]" @on-change="change"></checklist>
+      <group v-else class="content" :title="`${i+1}.${question.title}`">
+        <radio :options="question.option" v-model="answerList[i]" @on-change="change"></radio>
+      </group>
     </div>
-    <footer>&copy;cbpm 2017 中国印钞造币总公司</footer>
+    <div class="submit">
+      <x-button :disabled="!isCompleted" type="primary" @click.native="submit">提交</x-button>
+    </div>
+    <footer>cbpm &copy; 2017 中国印钞造币总公司</footer>
     <toast v-model="toast.show">{{ toast.msg }}</toast>
   </div>
 </template>
@@ -17,6 +21,7 @@
     Toast,
     Group,
     Radio,
+    Checklist,
     XButton
   } from 'vux'
 
@@ -35,6 +40,7 @@
       Toast,
       Group,
       Radio,
+      Checklist,
       XButton
     },
     data() {
@@ -54,11 +60,20 @@
         return window.location.href.split('#')[0];
       }
     },
+    watch: {
+      answerList(val) {
+        console.log(val);
+        this.getCompleteStatus();
+      }
+    },
     methods: {
       getCompleteStatus() {
         let flag = true;
         for (let i = 0; flag && i < this.answerList.length; i++) {
           let item = this.answerList[i];
+          // if ((this.questionList[i].multiply == false && item.length == 0) || item == '') {
+          //   flag = false;
+          // }
           if (item == '') {
             flag = false;
           }
@@ -66,9 +81,7 @@
         this.isCompleted = flag;
       },
       change() {
-        this.getCompleteStatus();
-        console.log(this.answerList);
-        console.log(this.isCompleted);
+        // console.log(this.answerList);
       },
       getSubmitData() {
         return {
@@ -103,7 +116,7 @@
       },
       init() {
         document.title = '现金使用情况问卷调查';
-        this.answerList = this.questionList.map(item => '');
+        this.answerList = this.questionList.map(item => item.multiply ? [] : '');
       }
     },
     mounted() {
@@ -114,6 +127,7 @@
 </script>
 
 <style scoped lang="less">
+  @import '~vux/src/styles/1px.less';
   .wrapper {
     padding: 20px 0;
     .thin {
@@ -123,8 +137,7 @@
       font-size: 18pt;
       .thin;
       text-align: center;
-      line-height: 60px;
-      border-bottom: 1px solid #ccc;
+      line-height: 60px; // border-bottom: 1px solid #ccc;
     }
     .content {
       margin: 20px 0;
@@ -134,11 +147,6 @@
     }
     .submit {
       margin: 20px;
-    }
-    footer {
-      font-size: 14px;
-      color: #999;
-      text-align: center;
     }
   }
 
