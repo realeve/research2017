@@ -15,5 +15,15 @@ export default new Router({
         component: function(resolve) {
             require(['../components/MyInfo.vue'], resolve)
         }
+    }, {
+        path: '/lucker',
+        component: function(resolve) {
+            require(['../components/LuckyList.vue'], resolve)
+        }
+    }, {
+        path: '/setting',
+        component: function(resolve) {
+            require(['../components/Setting.vue'], resolve)
+        }
     }]
 })

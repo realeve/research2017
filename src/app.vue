@@ -25,7 +25,7 @@
     data() {
       return {
         code: '',
-        apiId: 'wx0d9af88bd9613e6a',
+        apiId: 'wx762c9153df774440',
       }
     },
     computed: {
@@ -148,6 +148,9 @@
         return false;
       },
       recordReadNum() {
+        if(location.href.includes('localhost')){
+          return;
+        }
         let url = window.location.href.split("?")[0];
         let params = {
           s: '/addon/Api/Api/recordReadNum',
