@@ -12,7 +12,7 @@
 <script>
 import {
   Panel,
-  Group,
+  Group
 } from 'vux'
 
 import {
@@ -22,7 +22,7 @@ import {
 export default {
   components: {
     Panel,
-    Group,
+    Group
   },
   data() {
     return {
