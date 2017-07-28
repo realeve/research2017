@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import {  
-    Panel,
-    Group,
+import {
+  Panel,
+  Group,
 } from 'vux'
 
 import {
@@ -20,14 +20,14 @@ import {
 } from 'vuex'
 
 export default {
-  components: {    
+  components: {
     Panel,
     Group,
   },
   data() {
-    return {      
+    return {
       type: '1',
-      list:[]
+      list: []
     }
   },
   computed: {
@@ -41,10 +41,10 @@ export default {
       this.$http.jsonp(this.cdnUrl, {
         params
       }).then(res => {
-        this.list = res.data.map((item,i)=>{
-          item.title = `${i+1}.${item.title}`;
+        this.list = res.data.map((item, i) => {
+          item.title = `${i + 1}.${item.title}`;
           return item;
-        });        
+        });
       });
     },
     init() {
@@ -67,7 +67,7 @@ export default {
   font-weight: 100;
   .content {
     flex: 1;
-  }  
+  }
 }
 
 footer {
