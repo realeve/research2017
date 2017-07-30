@@ -107,9 +107,21 @@ export default {
         }
       });
     },
-    init() {
-      document.title = '现金使用情况问卷调查';
-      this.answerList = this.questionList.map(item => item.multiply ? [] : '');
+    init(){
+      let params = {
+        s: '/addon/Api/Api/isResearchAnswered',
+        openid:this.userInfo.openid
+      }
+      this.$http.jsonp(this.cdnUrl, {
+        params
+      }).then(res => {
+        if(res.data[0].num>0){
+          this.$router.push('address');
+        }else{
+          document.title = '现金使用情况问卷调查';
+          this.answerList = this.questionList.map(item => item.multiply ? [] : '');
+        }
+      });      
     }
   },
   mounted() {

@@ -62,7 +62,7 @@ export default {
       }).then(res => res.data);
     },
     wxReady(obj) {
-      this.$wechat.config({
+      let config = {
         debug: false,
         appId: obj.appId,
         timestamp: obj.timestamp,
@@ -73,7 +73,8 @@ export default {
           'onMenuShareQZone', 'hideMenuItems'
 
         ]
-      })
+      };
+      this.$wechat.config(config);
     },
     initWxShare() {
       this.$wechat.ready(() => {
@@ -138,13 +139,13 @@ export default {
       })
     },
     needRedirect() {
-      let params = querystring.parse(window.location.href.split('?')[1]);
-      if (!Reflect.get(params, 'code')) {
+      let hrefArr = window.location.href.split('?');
+      if (hrefArr.length == 1) {
         window.location.href = this.redirectUrl;
         return true;
       }
+      let params = querystring.parse(hrefArr[1]);
       this.code = params.code;
-      console.log(this.redirectUrl);
       return false;
     },
     recordReadNum() {
@@ -158,8 +159,6 @@ export default {
       }
       this.$http.jsonp(this.cdnUrl, {
         params
-      }).then(res => {
-        console.log(res.data);
       });
     }
   },
@@ -167,14 +166,14 @@ export default {
     // 开发模式下，初始化值
     if (process.env.NODE_ENV == 'development') {
       this.userInfo = {
-        "openid": "o6lf8vuuvwwolqpAGPOG_MdMHaKM",
+        "openid": "oW0w1v4qftC8xUP3q-MPIHtXB7hI",
         "nickname": "宾不厌诈",
         "sex": 1,
         "language": "zh_CN",
         "city": "成都",
         "province": "四川",
         "country": "中国",
-        "headimgurl": "http://wx.qlogo.cn/mmopen/Q3auHgzwzM5pR1A0Hxo7ibPnxQib1jibiaBSAOW0s3noCngvI4R8nNFf4sXldyyecaM5UZ4eGC9oZicAicM9XndXHBdQ87sFJzV56ebv84KqJHuZs/0",
+        "headimgurl": "http://wx.qlogo.cn/mmhead/Q3auHgzwzM7RSAYiaxiaC1lOZYicWic9YZKEFJ2TKEfh3pFJibLvf7IxdLQ/0",
         "privilege": []
       }
     } else {
