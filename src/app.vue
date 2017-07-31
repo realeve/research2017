@@ -82,7 +82,7 @@ export default {
           title: '现金使用情况有奖调查', // 分享标题
           desc: '现金使用情况有奖调查',
           link: this.shareUrl,
-          imgUrl: 'http://cbpm.sinaapp.com/cdn/logo/cbpm.jpg',
+          imgUrl: 'http://cbpm.sinaapp.com/cdn/logo/cbc.jpg',
           type: '',
           dataUrl: '',
           success: function () { },
