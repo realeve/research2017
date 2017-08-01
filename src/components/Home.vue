@@ -1,6 +1,5 @@
 <template>
   <div class="wrapper">
-    <h2 class="title vux-1px-b">现金使用情况问卷调查</h2>
     <div v-for="(question,i) of questionList" :key="question.title">
       <checklist v-if="question.multiply" label-position="left" :title="`${i+1}.${question.title}`" required :options="question.option" v-model="answerList[i]" @on-change="change"></checklist>
       <group v-else class="content" :title="`${i+1}.${question.title}`">
@@ -10,7 +9,6 @@
     <div class="submit">
       <x-button :disabled="!isCompleted" type="primary" @click.native="submit">提交</x-button>
     </div>
-    <footer>cbpm &copy; 2017 中国印钞造币总公司</footer>
     <toast v-model="toast.show">{{ toast.msg }}</toast>
   </div>
 </template>
@@ -134,7 +132,7 @@ export default {
 <style scoped lang="less">
 @import '~vux/src/styles/1px.less';
 .wrapper {
-  padding: 20px 0;
+  padding: 0 0 20px 0;
   .thin {
     font-weight: 100;
   }

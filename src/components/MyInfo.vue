@@ -27,9 +27,6 @@
         </div>
       </template>
     </div>
-    <footer>
-      cbpc &copy; 2017 中国印钞造币总公司
-    </footer>
     <toast v-model="toast.show">{{ toast.msg }}</toast>
   </div>
 </template>
@@ -215,7 +212,4 @@ export default {
   }
 }
 
-footer {
-  padding-bottom: 10px;
-}
 </style>

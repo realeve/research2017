@@ -16,8 +16,6 @@
         <x-button plain @click.native="viewHome">返回首页</x-button>
       </div>
     </template>
-
-    <footer>cbpm &copy; 2017 中国印钞造币总公司</footer>
     <toast v-model="toast.show">{{ toast.msg }}</toast>
   </div>
 </template>

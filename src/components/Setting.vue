@@ -14,9 +14,6 @@
         <x-button plain @click.native="viewLucky">查看中奖列表</x-button>
       </div>
     </div>
-    <footer>
-      cbpc &copy; 2017 中国印钞造币总公司
-    </footer>
     <toast v-model="toast.show">{{ toast.msg }}</toast>
   </div>
 </template>
@@ -161,6 +158,7 @@ export default {
   min-height: 100vh;
   flex-direction: column;
   font-weight: 100;
+  margin-top: 10px;
   .content {
     flex: 1;
   }
@@ -172,7 +170,4 @@ export default {
   }
 }
 
-footer {
-  padding-bottom: 10px;
-}
 </style>
