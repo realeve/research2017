@@ -10,6 +10,7 @@
   
       <div class="submit">
         <x-button type="primary" @click.native="submit">提交信息</x-button>
+        <x-button plain @click.native="clear">清空数据</x-button>
         <x-button plain @click.native="viewLucky">查看中奖列表</x-button>
       </div>
     </div>
@@ -122,6 +123,17 @@ export default {
         prize_num: this.prize_num,
         people_num: this.people_num,
         prize_name: this.prize_name
+      }
+      this.$http.jsonp(this.cdnUrl, {
+        params
+      }).then(res => {
+        this.toast.show = true;
+        this.toast.msg = res.data.msg;
+      });
+    },
+    clear(){
+       let params = {
+        s: '/addon/Api/Api/clearResearchData'
       }
       this.$http.jsonp(this.cdnUrl, {
         params
