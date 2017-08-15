@@ -1,5 +1,9 @@
 <template>
   <div class="wrapper">
+    <div class="welcome">
+     <img class="user" :src="userInfo.headimgurl">
+     <p class="txt">{{userInfo.nickname}}您好,感谢参加本次调查问卷活动,本问卷数据我们只用于对现金使用情况研究,不作它用。<br>问卷填写完毕后系统会自动抽奖，请您认真作答，感谢您的参与。</p>
+    </div>
     <div v-for="(question,i) of questionList" :key="question.title">
       <checklist v-if="question.multiply" label-position="left" :title="`${i+1}.${question.title}`" required :options="question.option" v-model="answerList[i]" @on-change="change"></checklist>
       <group v-else class="content" :title="`${i+1}.${question.title}`">
@@ -131,6 +135,7 @@ export default {
 
 <style scoped lang="less">
 @import '~vux/src/styles/1px.less';
+  @userSize:60px;
 .wrapper {
   padding: 0 0 20px 0;
   .thin {
@@ -150,6 +155,21 @@ export default {
   }
   .submit {
     margin: 20px;
+  }
+  .welcome{
+    padding:30px 0 0 15px;
+    display: flex;
+    flex-direction: row;
+    .user{
+      width: @userSize;
+      height: @userSize;
+      border-radius: 50%;
+    }
+    .txt{
+      padding-left:20px;
+      font-size: 11pt;
+      color:#555;
+    }
   }
 }
 </style>
