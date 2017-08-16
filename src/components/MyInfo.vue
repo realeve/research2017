@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="content">
-      <msg :title="'感谢参与调查'" :description="desc" :icon="icon"></msg>
+      <msg :title="title" :description="desc" :icon="icon"></msg>
       <template v-if="isLucky">
         <form-preview header-label="用户信息预览" :header-value="username+'(收)'" :body-items="list" />
         <div class="box">
@@ -65,7 +65,8 @@ export default {
     return {
       username: '',
       mobile: '',
-      desc: '感谢您对本次活动的大力支持。',
+      title:'很遗憾您未中奖',
+      desc: '感谢您的参与。',
       icon: 'success',
       toast: {
         show: false,
@@ -130,6 +131,7 @@ export default {
         if (!this.isLucky) {
           return;
         }
+        this.title = '恭喜您'; 
         this.desc = '恭喜您成为本次活动的幸运用户，请填写个人收件信息以方便我们邮寄，如果信息填写不完整，视为自动放弃中奖资格。';
         if (typeof obj == 'undefined' || !Reflect.get(obj, 'username')) {
           return;

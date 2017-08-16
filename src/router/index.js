@@ -25,5 +25,10 @@ export default new Router({
         component: function(resolve) {
             require(['../components/Setting.vue'], resolve)
         }
+    }, {
+        path: '/data',
+        component: function(resolve) {
+            require(['../components/Data.vue'], resolve)
+        }
     }]
 })
