@@ -66,7 +66,7 @@ export default {
       username: '',
       mobile: '',
       title:'很遗憾您未中奖',
-      desc: '感谢您的参与。',
+      desc: '感谢您的参与,若有疑问请将以下信息截屏发送至后台工作人员。'+this.userInfo.openid,
       icon: 'success',
       toast: {
         show: false,
