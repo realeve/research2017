@@ -114,7 +114,7 @@ export default {
           this.toast.msg = res.data.msg;
           if (res.data.status == 1) {
             // 进入抽奖页面
-            this.$router.push("chart");
+            this.$router.push("address");
           }
         })
         .catch(e => {
@@ -133,7 +133,8 @@ export default {
         })
         .then(res => {
           if (res.data.status > 1) {
-            this.$router.push("chart");
+            // 进入抽奖页面
+            this.$router.push("address");
           } else {
             document.title = "拒收现金现象问卷调查";
             this.answerList = this.questionList.map(

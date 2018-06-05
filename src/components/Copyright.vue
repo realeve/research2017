@@ -6,8 +6,8 @@
 <style lang="less" scoped>
 footer {
   padding-bottom: 10px;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+  // position: absolute;
+  // bottom: 0;
+  // width: 100%;
 }
 </style>

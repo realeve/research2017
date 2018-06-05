@@ -66,7 +66,7 @@ export default {
       title: "很遗憾您未中奖",
       desc:
         "感谢您的参与,若有疑问请将以下信息截屏发送至后台工作人员。" +
-        this.userInfo.openid,
+        (this.userInfo ? this.userInfo.openid : ""),
       icon: "success",
       toast: {
         show: false,
@@ -121,6 +121,9 @@ export default {
         .then(res => {
           this.toast.show = true;
           this.toast.msg = res.data.msg;
+          if (res.data.id > 0) {
+            this.viewLucky();
+          }
         });
     },
     loadDefaultData() {
@@ -134,6 +137,7 @@ export default {
         })
         .then(res => {
           let obj = res.data;
+
           this.isLucky = obj.prize_level == 1;
 
           if (!this.isLucky) {
@@ -161,7 +165,8 @@ export default {
       // 抽奖
       let params = {
         s: "/addon/Api/Api/doResearchLottery",
-        openid: this.userInfo.openid
+        openid: this.userInfo.openid,
+        sid: this.$store.state.sport.id
       };
       this.$http
         .jsonp(this.cdnUrl, {
@@ -189,7 +194,7 @@ export default {
         });
     },
     init() {
-      document.title = "拒收现金现象调查问卷幸运用户";
+      document.title = "拒收现金现象有奖问卷调查幸运用户";
       this.doLottery();
     }
   },
