@@ -3,7 +3,7 @@
 
     <img class="logo" src="http://cbpm.sinaapp.com/cdn/201708/static/img/bg.jpg">
     <div class="title">
-      拒收现金现象有奖调查问卷
+      现金使用情况调查问卷
     </div>
   </div>
 </template>

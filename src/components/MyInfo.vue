@@ -64,9 +64,7 @@ export default {
       username: "",
       mobile: "",
       title: "很遗憾您未中奖",
-      desc:
-        "感谢您的参与,若有疑问请将以下信息截屏发送至后台工作人员。" +
-        (this.userInfo ? this.userInfo.openid : ""),
+      desc: "感谢您的参与", //,若有疑问请将以下信息截屏发送至后台工作人员。" +  (this.userInfo ? this.userInfo.openid : ""),
       icon: "success",
       toast: {
         show: false,
@@ -185,7 +183,9 @@ export default {
             // 抽奖信息写入正常
             case 1:
             case 2:
-              this.loadDefaultData();
+              if (res.data.islucky) {
+                this.loadDefaultData();
+              }
               break;
             case 3:
               this.doLottery();
@@ -194,7 +194,7 @@ export default {
         });
     },
     init() {
-      document.title = "拒收现金现象有奖问卷调查幸运用户";
+      document.title = "现金使用情况调查问卷幸运用户";
       this.doLottery();
     }
   },

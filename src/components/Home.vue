@@ -2,8 +2,7 @@
   <div class="wrapper">
     <div class="welcome">
       <img class="user" :src="userInfo.headimgurl">
-      <p class="txt">{{userInfo.nickname}}您好,感谢参加本次调查问卷活动,本问卷数据我们只用于对拒收现金现象研究,不作它用，感谢您的参与。</p>
-      <!-- 。<br>问卷填写完毕后系统会自动抽奖，请您认真作答 -->
+      <p class="txt">{{userInfo.nickname}}您好,感谢参加本次调查问卷活动,本问卷数据我们只用于对现金使用情况研究,不作它用。<br>问卷填写完毕后系统会自动抽奖，请您认真作答，感谢您的参与。</p>
     </div>
     <div v-for="(question,i) of questionList" :key="question.title">
       <checklist v-if="question.multiply" label-position="left" :title="`${i+1}.${question.title}`" required :options="question.option" v-model="answerList[i]" @on-change="change"></checklist>
@@ -92,7 +91,7 @@ export default {
         sid: this.sport.id,
         timestamp: this.time,
         signature: this.signature,
-        addstr: this.answerList.join(","),
+        addstr: this.convertAnswers(), //this.answerList.join(","),
         openid: this.userInfo.openid,
         nickname: this.userInfo.nickname,
         sex: this.userInfo.sex,
@@ -102,8 +101,25 @@ export default {
         headimgurl: this.userInfo.headimgurl
       };
     },
+    convertAnswers() {
+      let answers = [];
+      this.answerList.map((item, idx) => {
+        let question = questionList[idx].option;
+        let curAnswer = [];
+        question.forEach((answer, i) => {
+          if (item.includes(answer)) {
+            curAnswer.push(i);
+          }
+        });
+        answers.push(curAnswer.join(","));
+      });
+
+      // 将所有题目选项答案连接
+      return answers.map(item => `'${item}'`).join(",");
+    },
     submit() {
       let params = this.getSubmitData();
+
       // params.s = "/addon/Api/Api/setResearch";
       this.$http
         .jsonp(this.cdnUrl, {
@@ -123,7 +139,8 @@ export default {
     },
     init() {
       let params = {
-        s: "/addon/Api/Api/isSetUserInfo",
+        // s: "/addon/Api/Api/isSetUserInfo",
+        s: "/addon/Api/Api/getResearchStatus",
         openid: this.openid,
         sid: this.sport.id
       };
@@ -132,11 +149,21 @@ export default {
           params
         })
         .then(res => {
-          if (res.data.status > 1) {
+          // if (res.data.status > 1) {
+          //   // 进入抽奖页面
+          //   this.$router.push("address");
+          // } else {
+          //   document.title = "现金使用情况调查问卷";
+          //   this.answerList = this.questionList.map(
+          //     item => (item.multiply ? [] : "")
+          //   );
+          // }
+
+          if (res.data[0].num > 0) {
             // 进入抽奖页面
             this.$router.push("address");
           } else {
-            document.title = "拒收现金现象问卷调查";
+            document.title = "现金使用情况调查问卷";
             this.answerList = this.questionList.map(
               item => (item.multiply ? [] : "")
             );

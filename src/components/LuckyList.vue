@@ -42,7 +42,7 @@ export default {
         });
     },
     init() {
-      document.title = "拒收现金现象调查幸运用户列表";
+      document.title = "现金使用情况调查问卷幸运用户列表";
       this.loadDefaultData();
     }
   },

@@ -92,8 +92,8 @@ export default {
     initWxShare() {
       this.$wechat.ready(() => {
         let option = {
-          title: "拒收现金现象有奖调查问卷", // 分享标题
-          desc: "拒收现金现象有奖调查问卷",
+          title: "现金使用情况调查问卷", // 分享标题
+          desc: "现金使用情况调查问卷",
           link: this.shareUrl,
           imgUrl: "http://cbpm.sinaapp.com/cdn/logo/cbc.jpg",
           type: "",
