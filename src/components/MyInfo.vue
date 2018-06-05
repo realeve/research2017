@@ -9,12 +9,12 @@
             <x-input title="姓名" name="username" v-model="username" placeholder="请输入姓名" is-type="china-name"></x-input>
             <x-input title="手机号码" name="mobile" v-model="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile"></x-input>
           </group>
-  
+
           <group>
             <x-address title="省/市" raw-value v-model="addressArr" :list="addressData" inline-desc="点击设置地址"></x-address>
             <x-input title="详细地址" name="address_detail" v-model="address_detail" placeholder="请输入详细信息"></x-input>
           </group>
-  
+
           <div class="submit">
             <x-button type="primary" @click.native="submit">提交信息</x-button>
             <x-button plain @click.native="viewLucky">查看中奖列表</x-button>
@@ -44,11 +44,9 @@ import {
   ChinaAddressV3Data,
   Value2nameFilter as value2name,
   FormPreview
-} from 'vux'
+} from "vux";
 
-import {
-  mapState
-} from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -63,130 +61,142 @@ export default {
   },
   data() {
     return {
-      username: '',
-      mobile: '',
-      title:'很遗憾您未中奖',
-      desc: '感谢您的参与,若有疑问请将以下信息截屏发送至后台工作人员。'+this.userInfo.openid,
-      icon: 'success',
+      username: "",
+      mobile: "",
+      title: "很遗憾您未中奖",
+      desc:
+        "感谢您的参与,若有疑问请将以下信息截屏发送至后台工作人员。" +
+        this.userInfo.openid,
+      icon: "success",
       toast: {
         show: false,
-        msg: ''
+        msg: ""
       },
       addressArr: [],
       addressData: ChinaAddressV3Data,
-      address_detail: '',
+      address_detail: "",
       isLucky: 0
-    }
+    };
   },
   computed: {
-    ...mapState(['userInfo', 'cdnUrl']),
+    ...mapState(["userInfo", "cdnUrl"]),
     address() {
-      return value2name(this.addressArr, ChinaAddressV3Data)
+      return value2name(this.addressArr, ChinaAddressV3Data);
     },
     list() {
-      return [{
-        label: '手机',
-        value: this.mobile
-      }, {
-        label: '省/市',
-        value: this.address
-      }, {
-        label: '详细地址',
-        value: this.address_detail
-      }];
+      return [
+        {
+          label: "手机",
+          value: this.mobile
+        },
+        {
+          label: "省/市",
+          value: this.address
+        },
+        {
+          label: "详细地址",
+          value: this.address_detail
+        }
+      ];
     }
   },
   methods: {
     now() {
-      return dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss');
+      return dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss");
     },
     submit() {
       let params = {
-        s: '/addon/Api/Api/setResearchLuckyInfo',
+        s: "/addon/Api/Api/setResearchLuckyInfo",
         username: this.username,
         mobile: this.mobile,
         address: this.address,
         address_detail: this.address_detail,
         rec_time: this.now(),
-        openid: this.userInfo.openid,
-      }
-      this.$http.jsonp(this.cdnUrl, {
-        params
-      }).then(res => {
-        this.toast.show = true;
-        this.toast.msg = res.data.msg;
-      })
+        openid: this.userInfo.openid
+      };
+      this.$http
+        .jsonp(this.cdnUrl, {
+          params
+        })
+        .then(res => {
+          this.toast.show = true;
+          this.toast.msg = res.data.msg;
+        });
     },
     loadDefaultData() {
       let params = {
-        s: '/addon/Api/Api/getResearchLuckyInfo',
-        openid: this.userInfo.openid,
-      }
-      this.$http.jsonp(this.cdnUrl, {
-        params
-      }).then(res => {
-        let obj = res.data;
-        this.isLucky = (obj.prize_level == 1);
+        s: "/addon/Api/Api/getResearchLuckyInfo",
+        openid: this.userInfo.openid
+      };
+      this.$http
+        .jsonp(this.cdnUrl, {
+          params
+        })
+        .then(res => {
+          let obj = res.data;
+          this.isLucky = obj.prize_level == 1;
 
-        if (!this.isLucky) {
-          return;
-        }
-        this.title = '恭喜您'; 
-        this.desc = '恭喜您成为本次活动的幸运用户，请填写个人收件信息以方便我们邮寄，如果信息填写不完整，视为自动放弃中奖资格。';
-        if (typeof obj == 'undefined' || !Reflect.get(obj, 'username')) {
-          return;
-        }
-        this.username = obj.username;
-        this.mobile = obj.mobile;
-        this.addressArr = obj.address.split(' ');
-        this.address_detail = obj.address_detail
-      });
+          if (!this.isLucky) {
+            return;
+          }
+          this.title = "恭喜您";
+          this.desc =
+            "恭喜您成为本次活动的幸运用户，请填写个人收件信息以方便我们邮寄，如果信息填写不完整，视为自动放弃中奖资格。";
+          if (typeof obj == "undefined" || !Reflect.get(obj, "username")) {
+            return;
+          }
+          this.username = obj.username;
+          this.mobile = obj.mobile;
+          this.addressArr = obj.address.split(" ");
+          this.address_detail = obj.address_detail;
+        });
     },
     viewHome() {
-      this.$router.push('/');
+      this.$router.push("/");
     },
     viewLucky() {
-      this.$router.push('/lucker');
+      this.$router.push("/lucker");
     },
     doLottery() {
       // 抽奖
       let params = {
-        s: '/addon/Api/Api/doResearchLottery',
-        openid: this.userInfo.openid,
-      }
-      this.$http.jsonp(this.cdnUrl, {
-        params
-      }).then(res => {
-        let status = res.data.id;
-        switch (status) {
-          case 0: // 无效的记录
-            this.toast.show = true;
-            this.toast.msg = '无效记录';
-            setTimeout(() => {
-              this.viewHome();
-            }, 500);
-            break;
-          // 抽奖信息写入正常
-          case 1:
-          case 2:
-            this.loadDefaultData();
-            break;
-          case 3:
-            this.doLottery();
-            break;
-        }
-      });
+        s: "/addon/Api/Api/doResearchLottery",
+        openid: this.userInfo.openid
+      };
+      this.$http
+        .jsonp(this.cdnUrl, {
+          params
+        })
+        .then(res => {
+          let status = res.data.id;
+          switch (status) {
+            case 0: // 无效的记录
+              this.toast.show = true;
+              this.toast.msg = "无效记录";
+              setTimeout(() => {
+                this.viewHome();
+              }, 500);
+              break;
+            // 抽奖信息写入正常
+            case 1:
+            case 2:
+              this.loadDefaultData();
+              break;
+            case 3:
+              this.doLottery();
+              break;
+          }
+        });
     },
     init() {
-      document.title = '现金使用情况问卷调查幸运用户';
+      document.title = "拒收现金现象调查问卷幸运用户";
       this.doLottery();
     }
   },
   mounted() {
     this.init();
   }
-}
-
+};
 </script>
 
 <style scoped lang="less">
@@ -213,5 +223,4 @@ export default {
     padding: 30px 20px;
   }
 }
-
 </style>
