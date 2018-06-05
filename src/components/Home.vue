@@ -137,7 +137,19 @@ export default {
           console.log(e);
         });
     },
+    auth() {
+      if (this.userInfo.openid == null || location.href.indexOf("from=") > 0) {
+        this.$router.push("/follow");
+        return false;
+      }
+      return true;
+    },
     init() {
+      let passed = this.auth();
+      if (!passed) {
+        return;
+      }
+
       let params = {
         // s: "/addon/Api/Api/isSetUserInfo",
         s: "/addon/Api/Api/getResearchStatus",
