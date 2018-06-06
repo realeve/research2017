@@ -5,7 +5,7 @@
       <p class="txt">{{userInfo.nickname}}您好,感谢参加本次调查问卷活动,本问卷数据我们只用于对现金使用情况研究,不作它用。<br>问卷填写完毕后系统会自动抽奖，请您认真作答，感谢您的参与。</p>
     </div>
     <div v-for="(question,i) of questionList" :key="question.title">
-      <p v-if="i==12" class="queTip">第5题选【商户或零售经营者】的答卷者，继续回答以下问题。</p>
+      <p v-if="i==12" class="queTip">第5题您的职业选【商户或零售经营者】的答卷者，继续回答以下问题。选择其他选项的答题者请勿填。</p>
       <checklist v-if="question.multiply" label-position="left" :title="`${i+1}.${question.title}`" required :options="question.option" v-model="answerList[i]" @on-change="change"></checklist>
       <group v-else class="content" :title="`${i+1}.${question.title}`">
         <radio :options="question.option" v-model="answerList[i]" @on-change="change"></radio>
