@@ -146,10 +146,10 @@ export default {
     },
     auth() {
       if (
-        this.userInfo.openid == null ||
         location.href.indexOf("from=singlemessage") > 0 ||
         location.href.indexOf("from=timeline") > 0 ||
-        location.href.indexOf("from=groupmessage") > 0
+        location.href.indexOf("from=groupmessage") > 0 ||
+        this.userInfo.openid == null
       ) {
         this.$router.push("/follow");
         return false;
