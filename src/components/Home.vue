@@ -72,20 +72,20 @@ export default {
       );
     },
     getCompleteStatus() {
+      if (this.answerList[4] == "商户或零售经营者") {
+        this.questionList = questionList;
+      } else {
+        this.questionList = questionList.slice(0, 12);
+      }
+
       let flag = true;
-      for (let i = 0; flag && i < this.answerList.length; i++) {
+      for (let i = 0; flag && i < this.questionList.length; i++) {
         let item = this.answerList[i];
         if (item == "") {
           flag = false;
         }
       }
       this.isCompleted = flag;
-
-      if (this.answerList[4] == "商户或零售经营者") {
-        this.questionList = questionList;
-      } else {
-        this.questionList = questionList.slice(0, 12);
-      }
     },
     change() {
       // console.log(this.answerList);
@@ -145,7 +145,12 @@ export default {
         });
     },
     auth() {
-      if (this.userInfo.openid == null || location.href.indexOf("from=") > 0) {
+      if (
+        this.userInfo.openid == null ||
+        location.href.indexOf("from=singlemessage") > 0 ||
+        location.href.indexOf("from=timeline") > 0 ||
+        location.href.indexOf("from=groupmessage") > 0
+      ) {
         this.$router.push("/follow");
         return false;
       }
