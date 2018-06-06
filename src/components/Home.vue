@@ -43,7 +43,7 @@ export default {
         msg: ""
       },
       time: new Date().getTime(),
-      questionList,
+      questionList: questionList.slice(0, 12),
       answerList: [],
       isCompleted: false
     };
@@ -80,6 +80,12 @@ export default {
         }
       }
       this.isCompleted = flag;
+
+      if (this.answerList[4] == "商户或零售经营者") {
+        this.questionList = questionList;
+      } else {
+        this.questionList = questionList.slice(0, 12);
+      }
     },
     change() {
       // console.log(this.answerList);
@@ -98,7 +104,8 @@ export default {
         city: this.userInfo.city,
         province: this.userInfo.province,
         country: this.userInfo.country,
-        headimgurl: this.userInfo.headimgurl
+        headimgurl: this.userInfo.headimgurl,
+        usertype: this.questionList.length == 12 ? "0" : 1
       };
     },
     convertAnswers() {
