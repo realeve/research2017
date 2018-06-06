@@ -252,7 +252,7 @@ export default {
     color: #e55;
     font-weight: bold;
     padding: 35px 15px 10px 18px;
-    font-size: 13pt;
+    font-size: 15pt;
   }
 }
 </style>
