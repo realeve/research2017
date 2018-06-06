@@ -83,7 +83,8 @@ export default {
       // }
 
       let flag = true;
-      for (let i = 0; flag && i < this.answerList.length; i++) {
+      // this.answerList.length
+      for (let i = 0; flag && i < 12; i++) {
         let item = this.answerList[i];
         if (item == "") {
           flag = false;
@@ -109,7 +110,12 @@ export default {
         province: this.userInfo.province,
         country: this.userInfo.country,
         headimgurl: this.userInfo.headimgurl,
-        usertype: this.usertype // this.questionList.length == 12 ? "0" : 1
+        usertype: this.usertype, // this.questionList.length == 12 ? "0" : 1
+
+        // 是否为无效问卷
+        invalid:
+          this.usertype == 0 &&
+          (this.answerList[12].length > 0 || this.answerList[13].length > 0)
       };
     },
     convertAnswers() {
