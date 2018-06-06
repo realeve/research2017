@@ -5,6 +5,7 @@
       <p class="txt">{{userInfo.nickname}}您好,感谢参加本次调查问卷活动,本问卷数据我们只用于对现金使用情况研究,不作它用。<br>问卷填写完毕后系统会自动抽奖，请您认真作答，感谢您的参与。</p>
     </div>
     <div v-for="(question,i) of questionList" :key="question.title">
+      <p v-if="i==12" class="queTip">第5题选【商户或零售经营者】的答卷者，继续回答以下问题。</p>
       <checklist v-if="question.multiply" label-position="left" :title="`${i+1}.${question.title}`" required :options="question.option" v-model="answerList[i]" @on-change="change"></checklist>
       <group v-else class="content" :title="`${i+1}.${question.title}`">
         <radio :options="question.option" v-model="answerList[i]" @on-change="change"></radio>
@@ -43,7 +44,7 @@ export default {
         msg: ""
       },
       time: new Date().getTime(),
-      questionList: questionList.slice(0, 12),
+      questionList, //: questionList.slice(0, 12),
       answerList: [],
       isCompleted: false
     };
@@ -55,6 +56,9 @@ export default {
     },
     openid() {
       return this.userInfo.openid;
+    },
+    usertype() {
+      return this.answerList[4] == "商户或零售经营者" ? 1 : 0;
     }
   },
   watch: {
@@ -72,14 +76,14 @@ export default {
       );
     },
     getCompleteStatus() {
-      if (this.answerList[4] == "商户或零售经营者") {
-        this.questionList = questionList;
-      } else {
-        this.questionList = questionList.slice(0, 12);
-      }
+      // if (this.answerList[4] == "商户或零售经营者") {
+      //   this.questionList = questionList;
+      // } else {
+      //   this.questionList = questionList.slice(0, 12);
+      // }
 
       let flag = true;
-      for (let i = 0; flag && i < this.questionList.length; i++) {
+      for (let i = 0; flag && i < this.answerList.length; i++) {
         let item = this.answerList[i];
         if (item == "") {
           flag = false;
@@ -105,7 +109,7 @@ export default {
         province: this.userInfo.province,
         country: this.userInfo.country,
         headimgurl: this.userInfo.headimgurl,
-        usertype: this.questionList.length == 12 ? "0" : 1
+        usertype: this.usertype // this.questionList.length == 12 ? "0" : 1
       };
     },
     convertAnswers() {
@@ -148,8 +152,7 @@ export default {
       if (
         location.href.indexOf("from=singlemessage") > 0 ||
         location.href.indexOf("from=timeline") > 0 ||
-        location.href.indexOf("from=groupmessage") > 0 ||
-        this.userInfo.openid == null
+        location.href.indexOf("from=groupmessage") > 0
       ) {
         this.$router.push("/follow");
         return false;
@@ -158,7 +161,7 @@ export default {
     },
     init() {
       let passed = this.auth();
-      if (!passed) {
+      if (!passed || this.userInfo.openid == null) {
         return;
       }
 
@@ -238,6 +241,12 @@ export default {
       font-size: 11pt;
       color: #555;
     }
+  }
+  .queTip {
+    color: #e55;
+    font-weight: bold;
+    padding: 35px 15px 10px 18px;
+    font-size: 13pt;
   }
 }
 </style>
