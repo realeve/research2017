@@ -194,6 +194,8 @@ export default {
         });
     },
     init() {
+      let address = window.localStorage.getItem("user_address");
+      this.addressArr = JSON.parse(address);
       document.title = "现金使用情况调查问卷幸运用户";
       this.doLottery();
     }

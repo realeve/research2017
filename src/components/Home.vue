@@ -1,17 +1,23 @@
 <template>
   <div class="wrapper">
     <div class="welcome">
-      <img class="user" :src="userInfo.headimgurl">
-      <p class="txt">{{userInfo.nickname}}您好,感谢参加本次调查问卷活动,本问卷数据我们只用于对现金使用情况研究,不作它用。<br>问卷填写完毕后系统会自动抽奖，请您认真作答，感谢您的参与。</p>
+      <!-- <img class="user" :src="userInfo.headimgurl"> -->
+      <p class="txt">{{userInfo.nickname}}您好,感谢参加本次调查问卷活动,本问卷数据我们只用于对现金使用情况研究,不作它用。<br>
+        <span style="font-weight:bold;">填写问卷前请先选择您所在的省/市/区方便数据统计，</span>数据提交后系统会自动抽奖，请您认真作答，感谢您的参与。
+      </p>
     </div>
-    <div v-for="(question,i) of questionList" :key="question.title">
+
+    <group>
+      <x-address title="您所在的省/市" raw-value v-model="addressArr" :list="addressData" inline-desc="点击设置地址"></x-address>
+    </group>
+    <div v-show="address.length>0" v-for="(question,i) of questionList" :key="question.title">
       <p v-if="i==12" class="queTip">第5题您的职业选【商户或零售经营者】的答卷者，继续回答以下问题。选择其他选项的答题者请勿填。</p>
       <checklist v-if="question.multiply" label-position="left" :title="`${i+1}.${question.title}`" required :options="question.option" v-model="answerList[i]" @on-change="change"></checklist>
       <group v-else class="content" :title="`${i+1}.${question.title}`">
         <radio :options="question.option" v-model="answerList[i]" @on-change="change"></radio>
       </group>
     </div>
-    <div class="submit">
+    <div v-show="address.length>0" class="submit">
       <x-button :disabled="!isCompleted" type="primary" @click.native="submit">提交</x-button>
     </div>
     <toast v-model="toast.show">{{ toast.msg }}</toast>
@@ -19,7 +25,16 @@
 </template>
 
 <script>
-import { Toast, Group, Radio, Checklist, XButton } from "vux";
+import {
+  Toast,
+  Group,
+  Radio,
+  Checklist,
+  XButton,
+  XAddress,
+  ChinaAddressV3Data,
+  Value2nameFilter as value2name
+} from "vux";
 
 import { dateFormat } from "vux";
 
@@ -35,7 +50,8 @@ export default {
     Group,
     Radio,
     Checklist,
-    XButton
+    XButton,
+    XAddress
   },
   data() {
     return {
@@ -46,7 +62,9 @@ export default {
       time: new Date().getTime(),
       questionList, //: questionList.slice(0, 12),
       answerList: [],
-      isCompleted: false
+      isCompleted: false,
+      addressArr: [],
+      addressData: ChinaAddressV3Data
     };
   },
   computed: {
@@ -59,6 +77,9 @@ export default {
     },
     usertype() {
       return this.answerList[4] == "商户或零售经营者" ? 1 : 0;
+    },
+    address() {
+      return value2name(this.addressArr, ChinaAddressV3Data);
     }
   },
   watch: {
@@ -97,6 +118,10 @@ export default {
     },
     getSubmitData() {
       this.getSignature();
+      let address = this.address.split(" ");
+      let [province, city, area_name] = address;
+      window.localStorage.setItem("user_address", JSON.stringify(address));
+
       return {
         s: "/addon/Api/Api/addAnswerInfo",
         sid: this.sport.id,
@@ -106,8 +131,9 @@ export default {
         openid: this.userInfo.openid,
         nickname: this.userInfo.nickname,
         sex: this.userInfo.sex,
-        city: this.userInfo.city,
-        province: this.userInfo.province,
+        city, //: this.userInfo.city,
+        province, //: this.userInfo.province,
+        area_name,
         country: this.userInfo.country,
         headimgurl: this.userInfo.headimgurl,
         usertype: this.usertype, // this.questionList.length == 12 ? "0" : 1
@@ -136,7 +162,8 @@ export default {
     },
     submit() {
       let params = this.getSubmitData();
-
+      // console.log(params);
+      // return;
       // params.s = "/addon/Api/Api/setResearch";
       this.$http
         .jsonp(this.cdnUrl, {
@@ -192,7 +219,12 @@ export default {
           //   );
           // }
 
-          if (res.data[0].num > 0) {
+          if (res.data.length > 0) {
+            this.addressArr = [
+              res.data[0].province,
+              res.data[0].city,
+              res.data[0].area_name
+            ];
             // 进入抽奖页面
             this.$router.push("address");
           } else {
@@ -234,7 +266,7 @@ export default {
     margin: 20px;
   }
   .welcome {
-    padding: 30px 0 0 15px;
+    padding: 30px 5px 0 5px;
     display: flex;
     flex-direction: row;
     .user {
@@ -243,7 +275,7 @@ export default {
       border-radius: 50%;
     }
     .txt {
-      padding-left: 20px;
+      // padding-left: 20px;
       font-size: 11pt;
       color: #555;
     }
