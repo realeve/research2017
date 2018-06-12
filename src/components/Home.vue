@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
     <div class="welcome">
-      <!-- <img class="user" :src="userInfo.headimgurl">{{userInfo.nickname}}您好, -->
-      <p class="txt">感谢参加本次调查问卷活动,本问卷数据我们只用于对现金使用情况研究,不作它用。<br>
+      <!-- <img class="user" :src="userInfo.headimgurl"> -->
+      <p class="txt">{{userInfo.nickname}}您好,感谢参加本次调查问卷活动,本问卷数据我们只用于对现金使用情况研究,不作它用。<br>
         <span style="font-weight:bold;">填写问卷前请先选择您所在的省/市/区方便数据统计，</span>数据提交后系统会自动抽奖，请您认真作答，感谢您的参与。
       </p>
     </div>
@@ -43,7 +43,6 @@ import md5 from "md5";
 
 // import questionList from "../assets/data/question.json";
 import questionList from "../assets/data/reject.json";
-import { setTimeout } from "timers";
 
 export default {
   components: {
@@ -57,8 +56,8 @@ export default {
   data() {
     return {
       toast: {
-        show: true,
-        msg: "获取用户信息中"
+        show: false,
+        msg: ""
       },
       time: new Date().getTime(),
       questionList, //: questionList.slice(0, 12),
@@ -86,12 +85,6 @@ export default {
   watch: {
     answerList(val) {
       this.getCompleteStatus();
-    },
-    openid(val) {
-      if (val) {
-        this.toast.show = false;
-        this.init();
-      }
     }
   },
   methods: {
@@ -136,8 +129,8 @@ export default {
         signature: this.signature,
         addstr: this.convertAnswers(), //this.answerList.join(","),
         openid: this.userInfo.openid,
-        nickname: this.userInfo.nickname ? this.userInfo.nickname : "未知",
-        sex: this.userInfo.sex ? this.userInfo.sex : -1,
+        nickname: this.userInfo.nickname,
+        sex: this.userInfo.sex,
         city, //: this.userInfo.city,
         province, //: this.userInfo.province,
         area_name,
@@ -202,11 +195,6 @@ export default {
     init() {
       let passed = this.auth();
       if (!passed || this.userInfo.openid == null) {
-        this.toast.show = true;
-        this.toast.msg = "获取身份失败";
-        // setTimeout(function() {
-        //   window.location.reload();
-        // }, 500);
         return;
       }
 
