@@ -256,7 +256,7 @@ export default {
               res.data[0].area_name
             ];
             // 进入抽奖页面
-            this.$router.push("address");
+            // this.$router.push("address");
           } else {
             document.title = "现金使用情况调查问卷";
             this.answerList = this.questionList.map(
