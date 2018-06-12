@@ -249,9 +249,7 @@ export default {
     }
   },
   mounted() {
-    if (this.openid != null) {
-      this.init();
-    }
+    this.init();
   }
 };
 </script>
