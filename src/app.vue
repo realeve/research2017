@@ -147,6 +147,10 @@ export default {
           if (Reflect.get(res.data, "nickname")) {
             localStorage.setItem("wx_userinfo", JSON.stringify(res.data));
           }
+          this.isLoading = false;
+        })
+        .catch(e => {
+          this.isLoading = false;
         });
     },
     wxInit() {
@@ -184,6 +188,7 @@ export default {
     }
   },
   created() {
+    this.isLoading = true;
     // 开发模式下，初始化值
     if (process.env.NODE_ENV == "development") {
       this.userInfo = {
@@ -198,6 +203,7 @@ export default {
           "http://wx.qlogo.cn/mmhead/Q3auHgzwzM7RSAYiaxiaC1lOZYicWic9YZKEFJ2TKEfh3pFJibLvf7IxdLQ/0",
         privilege: []
       };
+      this.isLoading = false;
     } else {
       // 正式环境微信载入
       this.wxInit();

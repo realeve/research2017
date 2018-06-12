@@ -57,8 +57,8 @@ export default {
   data() {
     return {
       toast: {
-        show: false,
-        msg: ""
+        show: true,
+        msg: "获取用户信息中"
       },
       time: new Date().getTime(),
       questionList, //: questionList.slice(0, 12),
@@ -86,6 +86,12 @@ export default {
   watch: {
     answerList(val) {
       this.getCompleteStatus();
+    },
+    openid(val) {
+      if (val) {
+        this.toast.show = false;
+        this.init();
+      }
     }
   },
   methods: {
@@ -198,9 +204,9 @@ export default {
       if (!passed || this.userInfo.openid == null) {
         this.toast.show = true;
         this.toast.msg = "获取身份失败";
-        setTimeout(function() {
-          window.location.reload();
-        }, 500);
+        // setTimeout(function() {
+        //   window.location.reload();
+        // }, 500);
         return;
       }
 
@@ -243,7 +249,9 @@ export default {
     }
   },
   mounted() {
-    this.init();
+    if (this.openid != null) {
+      this.init();
+    }
   }
 };
 </script>
