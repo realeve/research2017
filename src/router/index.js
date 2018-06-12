@@ -6,6 +6,11 @@ Vue.use(Router)
 export default new Router({
   mode: 'hash',
   routes: [{
+      path: '/test',
+      component: function (resolve) {
+        require(['../components/Test.vue'], resolve)
+      }
+    }, {
       path: '/',
       component: function (resolve) {
         require(['../components/Home.vue'], resolve)
