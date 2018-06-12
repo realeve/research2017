@@ -129,7 +129,10 @@ export default {
         signature: this.signature,
         addstr: this.convertAnswers(), //this.answerList.join(","),
         openid: this.userInfo.openid,
-        nickname: this.userInfo.nickname,
+        nickname:
+          typeof this.userInfo.nickname == "undefined"
+            ? "未知"
+            : this.userInfo.nickname,
         sex: this.userInfo.sex,
         city, //: this.userInfo.city,
         province, //: this.userInfo.province,
