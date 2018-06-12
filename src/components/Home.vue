@@ -240,7 +240,9 @@ export default {
     }
   },
   mounted() {
-    this.init();
+    if (this.auth()) {
+      this.init();
+    }
   }
 };
 </script>
