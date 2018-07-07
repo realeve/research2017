@@ -1,31 +1,36 @@
 <template>
-  <div class="wrapper">
-    <div class="welcome">
-      <!-- <img class="user" :src="userInfo.headimgurl"> -->
-      <p class="txt">{{userInfo.nickname}}您好,感谢参加本次调查问卷活动,本问卷数据我们只用于对现金使用情况研究,不作它用。<br>
-        <span style="font-weight:bold;">填写问卷前请先选择您所在的省/市/区方便数据统计，</span>数据提交后系统会自动抽奖，请您认真作答，感谢您的参与。
-      </p>
+  <div>
+    <div class="wrapper" v-if="isEnd">
+      <msg title="活动已结束" description="感谢您的参与。" icon="success"></msg>
     </div>
+    <div class="wrapper" v-else>
+      <div class="welcome">
+        <p class="txt">{{userInfo.nickname}}您好,感谢参加本次调查问卷活动,本问卷数据我们只用于对现金使用情况研究,不作它用。<br>
+          <span style="font-weight:bold;">填写问卷前请先选择您所在的省/市/区方便数据统计，</span>数据提交后系统会自动抽奖，请您认真作答，感谢您的参与。
+        </p>
+      </div>
 
-    <group>
-      <x-address title="您所在的省/市" raw-value v-model="addressArr" :list="addressData" inline-desc="点击设置地址"></x-address>
-    </group>
-    <div v-show="address.length>0" v-for="(question,i) of questionList" :key="question.title">
-      <p v-if="i==12" class="queTip">第5题您的职业选【商户或零售经营者】的答卷者，继续回答以下问题。选择其他选项的答题者请勿填。</p>
-      <checklist v-if="question.multiply" label-position="left" :title="`${i+1}.${question.title}`" required :options="question.option" v-model="answerList[i]" @on-change="change"></checklist>
-      <group v-else class="content" :title="`${i+1}.${question.title}`">
-        <radio :options="question.option" v-model="answerList[i]" @on-change="change"></radio>
+      <group>
+        <x-address title="您所在的省/市" raw-value v-model="addressArr" :list="addressData" inline-desc="点击设置地址"></x-address>
       </group>
+      <div v-show="address.length>0" v-for="(question,i) of questionList" :key="question.title">
+        <p v-if="i==12" class="queTip">第5题您的职业选【商户或零售经营者】的答卷者，继续回答以下问题。选择其他选项的答题者请勿填。</p>
+        <checklist v-if="question.multiply" label-position="left" :title="`${i+1}.${question.title}`" required :options="question.option" v-model="answerList[i]" @on-change="change"></checklist>
+        <group v-else class="content" :title="`${i+1}.${question.title}`">
+          <radio :options="question.option" v-model="answerList[i]" @on-change="change"></radio>
+        </group>
+      </div>
+      <div v-show="address.length>0" class="submit">
+        <x-button :disabled="!isCompleted" type="primary" @click.native="submit">提交</x-button>
+      </div>
+      <toast v-model="toast.show">{{ toast.msg }}</toast>
     </div>
-    <div v-show="address.length>0" class="submit">
-      <x-button :disabled="!isCompleted" type="primary" @click.native="submit">提交</x-button>
-    </div>
-    <toast v-model="toast.show">{{ toast.msg }}</toast>
   </div>
 </template>
 
 <script>
 import {
+  Msg,
   Toast,
   Group,
   Radio,
@@ -46,6 +51,7 @@ import questionList from "../assets/data/reject.json";
 
 export default {
   components: {
+    Msg,
     Toast,
     Group,
     Radio,
@@ -64,7 +70,8 @@ export default {
       answerList: [],
       isCompleted: false,
       addressArr: [],
-      addressData: ChinaAddressV3Data
+      addressData: ChinaAddressV3Data,
+      isEnd: dateFormat(new Date(), "YYYYMMDD") > "20180706"
     };
   },
   computed: {
